@@ -1,36 +1,57 @@
-## 🧪 How to Work on the Exercises
+# ✨ Exercise 4 – Refactor + Decorator Pattern with Full Test Coverage
 
-Each exercise is described in a GitHub Issue. Follow these steps to complete an exercise and submit your solution:
+## 📌 What’s Included
+### **Step 1 – Refactor `Product`**
+- Converted `Product` from a `record` to a standard Java class.
+- Implemented the **Builder Pattern** for flexible and safe object creation.
+- Added a new `price` field to `Product`.
+- Updated all code and tests to use `Product.Builder` instead of direct constructors.
 
-### 📥 1. Clone or Fork the Repository
-```bash
-git clone https://github.com/fungover/exercise2025.git
-```
-Or fork the repository via GitHub and clone your fork.
+### **Step 2 – Introduce Repository & Service Layers**
+- Created `ProductRepository` interface.
+- Implemented `InMemoryProductRepository` for in‑memory storage.
+- Introduced `ProductService` with **dependency injection** of `ProductRepository`.
+- Updated all tests to pass either a real `InMemoryProductRepository` or a mock to `ProductService`.
 
-### 🌱 2. Create a Branch
-Create a new branch named using the format: your-github-username/exerciseNumber
+### **Step 3 – Implement Decorator Pattern**
+- Created `Sellable` interface for price‑retrievable entities.
+- Added abstract `ProductDecorator` implementing `Sellable` and delegating calls.
+- Implemented `DiscountDecorator`:
+  - Applies a percentage discount to the product price.
+  - Validates discount range (0–100%).
+- Added **`DiscountDecoratorTest`** covering:
+  - ✅ Happy path (e.g., 1.5% discount)  
+  - ✅ 0% discount (no change)  
+  - ✅ 100% discount (price becomes 0)  
+  - ✅ Invalid discounts (<0 or >100) throw `IllegalArgumentException`
 
-Example for user githubuser working on Exercise 1:
+---
 
-```bash
-git checkout -b githubuser/exercise1
-```
+## 🎯 Why These Changes
+- **Builder Pattern** → Improves readability, maintainability, and reduces constructor overload complexity.
+- **Repository + Service Layers** → Separates concerns, improves testability, and follows clean architecture principles.
+- **Decorator Pattern** → Adds flexible, runtime‑configurable behavior without modifying existing classes.
+- **Full Test Coverage** → Ensures correctness, prevents regressions, and validates edge cases.
 
-### 🛠️ 3. Implement Your Solution
-Follow the instructions in the corresponding issue. If anything is unclear, ask questions by commenting directly on the issue.
+---
 
-### 🚀 4. Push Your Branch
-```bash
-git push origin githubuser/exercise1
-```
+## 🛠 How It Was Done
+- Replaced all direct `Product` instantiations with `Product.Builder`.
+- Injected `ProductRepository` into `ProductService` for better flexibility.
+- Implemented `DiscountDecorator` to override `getPrice()` while preserving other `Sellable` properties.
+- Wrote comprehensive unit tests for all new and modified public methods.
 
-### 📬 5. Create a Pull Request
-Open a Pull Request (PR) from your branch.
+---
 
-Link the PR to the issue you're solving.
+## ✅ Testing
+- All existing tests updated to work with the new `ProductService` and `Product.Builder`.
+- All tests pass (`mvn test` → green).
+- **New tests** in `DiscountDecoratorTest` verify:
+  - Correct discount calculation.
+  - No change for 0% discount.
+  - Price becomes 0 for 100% discount.
+  - Exceptions thrown for invalid discount values.
 
-Include a clear description of your solution.
-
-### 💬 6. Feedback and Iteration
-Reviewers may leave comments or suggestions. Update your branch and push changes until the PR is approved.
+---
+## Linked School Issue 
+ [Exercise 4 - Design Patterns](https://github.com/fungover/exercise2025/issues/71)
